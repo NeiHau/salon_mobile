@@ -28,12 +28,14 @@ class CustomerNotifier extends StateNotifier<Customer> {
           ),
         );
 
+  // 顧客情報
   final CollectionReference customers =
       FirebaseFirestore.instance.collection('customers');
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
-  Map<String, Customer> eventDetails = {}; // IDとCustomerオブジェクトのマッピング
+  // 顧客情報のマッピング
+  Map<String, Customer> eventDetails = {};
 
   String? fileName; // 追加: ファイル名を保持する変数
 
@@ -85,7 +87,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
         debugPrint("File does not exist at path");
       }
     } else {
-      print('No image selected.');
+      debugPrint('No image selected.');
     }
   }
 

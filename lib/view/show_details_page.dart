@@ -47,7 +47,7 @@ class ShowDetailsPageState extends ConsumerState<ShowDetailsPage> {
     return eventsForSelectedDate.isEmpty
         ? Scaffold(
             appBar: AppBar(
-              title: Text("Details for ${widget.selectedDate.toLocal()}"),
+              title: const Text("詳細画面"),
             ),
             body: Center(
               child: Column(

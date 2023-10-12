@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 
 import '../common/custom_snackbar.dart';
 import '../viewModel/customer_view_model.dart';
-import 'calendar_page.dart';
 import 'completed_input_page.dart';
 
 class InputDetailsForm extends ConsumerStatefulWidget {
@@ -33,13 +32,8 @@ class InputDetailsFormState extends ConsumerState<InputDetailsForm> {
             // リセット処理
             customerNotifier.setImageUrl('');
 
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CalendarPage(),
-              ),
-              (route) => route.isFirst, // 最初の画面（この場合はCalendarPage）に達したら停止
-            );
+            // 初期ルート(CalendarPage)に遷移
+            Navigator.popUntil(context, ModalRoute.withName('/'));
           },
         ),
       ),
@@ -81,7 +75,13 @@ class InputDetailsFormState extends ConsumerState<InputDetailsForm> {
                 child: const Text("Pick Image"),
               ),
               if (customer.imageUrl.isNotEmpty)
-                Image.file(File(customer.imageUrl)), // imageUrlを表示
+                SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: Image.file(
+                    File(customer.imageUrl),
+                  ),
+                ), // imageUrlを表示
               const Gap(20),
               ElevatedButton(
                 onPressed: () async {

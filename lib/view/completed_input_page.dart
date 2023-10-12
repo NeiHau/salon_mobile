@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
-
 class SuccessPage extends StatelessWidget {
   const SuccessPage({super.key});
 
@@ -20,12 +18,13 @@ class SuccessPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // CalendarPageに遷移
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomePage(),
-                  ),
-                );
+                // Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const HomePage(),
+                //   ),
+                // );
+                Navigator.popUntil(context, ModalRoute.withName('/'));
               },
               child: const Text('ホームページに戻る'),
             ),

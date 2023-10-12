@@ -5,7 +5,9 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>We need access to your photo library for...</string>
+    <string>We need access to your photo library for updating photos</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to your photo library for updating photos</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

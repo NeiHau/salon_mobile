@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 
 import '../model/customer.dart';
 import '../viewModel/customer_view_model.dart';
+import 'home_details_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -87,7 +88,10 @@ class HomePageState extends ConsumerState<HomePage> {
                                   children: [
                                     Text('年齢: ${customer.age}'),
                                     Text(
-                                        '追加日: ${customer.date.toLocal().year}年${customer.date.toLocal().month}月${customer.date.toLocal().day}日'),
+                                      '追加日: ${customer.date.toLocal().year}年'
+                                      '${customer.date.toLocal().month}月'
+                                      '${customer.date.toLocal().day}日',
+                                    ),
                                     Text('詳細: ${customer.description}'),
                                     // Image.network(
                                     //   customer.imageUrl,
@@ -96,6 +100,16 @@ class HomePageState extends ConsumerState<HomePage> {
                                     // ),
                                   ],
                                 ),
+                                onTap: () {
+                                  // TODO: 詳細画面に遷移
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const HomeDetailsPage(),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -111,7 +125,7 @@ class HomePageState extends ConsumerState<HomePage> {
             right: 20,
             bottom: 20,
             child: SizedBox(
-              width: 125,
+              width: 55,
               child: ElevatedButton(
                 onPressed: () async {
                   // showDialogでモーダルを開く
@@ -131,17 +145,18 @@ class HomePageState extends ConsumerState<HomePage> {
                               ),
                             ),
                             const Gap(20),
-                            ElevatedButton(
-                              onPressed: () async {
-                                selectedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2101),
-                                );
-                              },
-                              child: const Text("日付選択"),
-                            ),
+                            // 日付で絞り込み
+                            // ElevatedButton(
+                            //   onPressed: () async {
+                            //     selectedDate = await showDatePicker(
+                            //       context: context,
+                            //       initialDate: DateTime.now(),
+                            //       firstDate: DateTime(2000),
+                            //       lastDate: DateTime(2101),
+                            //     );
+                            //   },
+                            //   child: const Text("日付選択"),
+                            // ),
                           ],
                         ),
                         actions: [
@@ -163,14 +178,7 @@ class HomePageState extends ConsumerState<HomePage> {
                     },
                   );
                 },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("絞り込み"),
-                    SizedBox(width: 0),
-                    //Icon(Icons.filter_list),
-                  ],
-                ),
+                child: const Icon(Icons.search),
               ),
             ),
           ),
