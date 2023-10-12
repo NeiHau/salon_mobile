@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -78,8 +76,14 @@ class CustomerNotifier extends StateNotifier<Customer> {
     if (pickedFile != null) {
       final File file = File(pickedFile.path);
       fileName = basename(file.path); // 追加: ファイル名を取得
-      final String imageUrl = file.path; // あるいは他の方法でファイルを使用
-      setImageUrl(imageUrl);
+      setImageUrl(file.path);
+
+      // ファイル存在チェック
+      if (await file.exists()) {
+        await saveImageToFirebaseStorage();
+      } else {
+        debugPrint("File does not exist at path");
+      }
     } else {
       print('No image selected.');
     }
@@ -109,12 +113,8 @@ class CustomerNotifier extends StateNotifier<Customer> {
           .ref()
           .child(fileName ?? "default_name.jpg"); // 保持しているファイル名を使用
 
-      final String dataUrl = state.imageUrl;
-      final RegExp regex = RegExp(r'data:image/(.*);base64,');
-      final String base64String = dataUrl.replaceFirst(regex, '');
-      final Uint8List uint8ListData = base64Decode(base64String);
-
-      final UploadTask uploadTask = storageRef.putData(uint8ListData);
+      final File file = File(state.imageUrl);
+      final UploadTask uploadTask = storageRef.putFile(file);
 
       await uploadTask.whenComplete(() async {
         final String downloadUrl = await storageRef.getDownloadURL();

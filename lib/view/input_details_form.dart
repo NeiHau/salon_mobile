@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -28,6 +30,9 @@ class InputDetailsFormState extends ConsumerState<InputDetailsForm> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
+            // リセット処理
+            customerNotifier.setImageUrl('');
+
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -72,14 +77,11 @@ class InputDetailsFormState extends ConsumerState<InputDetailsForm> {
               ),
               const Gap(20),
               ElevatedButton(
-                onPressed: () {
-                  customerNotifier.getImage(); // 画像を選択
-                  customerNotifier.saveImageToFirebaseStorage(); // 画像をアップロード
-                },
+                onPressed: () => customerNotifier.getImage(), // 画像を選択
                 child: const Text("Pick Image"),
               ),
               if (customer.imageUrl.isNotEmpty)
-                Image.network(customer.imageUrl), // imageUrlを表示
+                Image.file(File(customer.imageUrl)), // imageUrlを表示
               const Gap(20),
               ElevatedButton(
                 onPressed: () async {
