@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:salon/main.dart';
 import 'package:salon/model/reservation.dart';
@@ -56,40 +58,68 @@ class ReservationNotifier extends StateNotifier<Reservation> {
 
       reservationDates = tempReservations;
       state = state.copyWith(reservationList: reservationDates);
+      state = state.copyWith();
     } catch (e) {
       logger.log(Level.trace, e);
     }
   }
 
   // 予約実行メソッド
-  Future<void> createReservation(Reservation reservation) async {
+  Future<bool> createReservation(Reservation reservation) async {
     try {
       // 予約情報をFirebaseに保存
       DocumentReference reservationRef =
           await reservations.add(reservation.toJson());
+
       // 顧客の予約リストに新しい予約を追加
-      await customers.doc(reservation.customerId).update({
-        'reservations': FieldValue.arrayUnion([reservationRef.id])
-      });
+      await customers.doc(reservation.customerId).set(
+        {
+          'reservations': FieldValue.arrayUnion([reservationRef.id])
+        },
+        SetOptions(merge: true),
+      );
+
       // 通知を送信
       await _firebaseMessaging.subscribeToTopic(reservationRef.id);
+
       // 通知メッセージを作成
       final message = RemoteMessage(
         threadId: reservationRef.id,
         notification: RemoteNotification(
             title: '予約完了', body: '${reservation.customerName}さん、予約が完了しました。'),
       );
+
       // 通知メッセージを送信
       // await FirebaseMessaging.instance.sendMessage(message: message);
       await fetchReservations();
+
+      return true;
     } catch (e) {
       logger.log(Level.trace, e);
+
+      return false;
     }
   }
 
-  Future<bool> deleteReservation(String docId) async {
+  // 予約をキャンセル
+  Future<bool> cancelReservation(DateTime selectedDate) async {
     try {
-      await reservations.doc(docId).delete();
+      String formattedDate =
+          DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(selectedDate);
+
+      debugPrint('Querying for date: $formattedDate');
+
+      QuerySnapshot reservationSnapshot = await reservations
+          .where('reservationDate', isEqualTo: formattedDate)
+          .get();
+
+      debugPrint('Found ${reservationSnapshot.docs.length} documents');
+
+      for (QueryDocumentSnapshot doc in reservationSnapshot.docs) {
+        await reservations.doc(doc.id).delete();
+      }
+
+      await fetchReservations();
       return true;
     } catch (e) {
       logger.log(Level.trace, e);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
+import '../common/custom_snackbar.dart';
 import '../model/reservation.dart';
 import '../viewModel/reservation_view_model.dart';
 
@@ -14,6 +16,13 @@ class ReservationPage extends ConsumerStatefulWidget {
 class ReservationPageState extends ConsumerState<ReservationPage> {
   DateTime _selectedDate = DateTime.now();
   String _customerName = '';
+  late final String customerId; // `late`キーワードを追加
+
+  @override
+  void initState() {
+    super.initState();
+    customerId = Uuid().v4(); // `customerId`の値を`initState`内で設定
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -58,16 +67,17 @@ class ReservationPageState extends ConsumerState<ReservationPage> {
             ElevatedButton(
               onPressed: () async {
                 final reservation = Reservation(
-                  customerId:
-                      'some-customer-id', // Customer ID should be fetched from your system
+                  customerId: customerId,
                   customerName: _customerName,
                   reservationDate: _selectedDate,
                 );
-                await ref
+                final result = await ref
                     .read(reservationNotifierProvider.notifier)
                     .createReservation(reservation);
-                if (mounted) {
+
+                if (mounted && result) {
                   Navigator.pop(context);
+                  CustomSnackbar.showTopSnackBar(context, '予約が完了しました。');
                 }
               },
               child: const Text('予約する'),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../common/custom_snackbar.dart';
 import '../viewModel/customer_view_model.dart';
+import '../viewModel/reservation_view_model.dart';
 import 'input_details_form.dart';
 
 class ShowDetailsPage extends ConsumerStatefulWidget {
@@ -10,10 +11,13 @@ class ShowDetailsPage extends ConsumerStatefulWidget {
     super.key,
     required this.selectedDate,
     this.eventDates,
+    this.reservationList,
   });
 
   final DateTime selectedDate;
   final Map<DateTime, List>? eventDates;
+
+  final Map<DateTime, List>? reservationList;
 
   @override
   ShowDetailsPageState createState() => ShowDetailsPageState();
@@ -33,6 +37,9 @@ class ShowDetailsPageState extends ConsumerState<ShowDetailsPage> {
 
     final eventDetails = ref.watch(customerNotifierProvider).eventDetails;
 
+    final reservationList =
+        ref.watch(reservationNotifierProvider).reservationList;
+
     final eventsForSelectedDate = widget.eventDates?[selectedDayKey]
             ?.map((docId) {
               final customer = eventDetails?[docId];
@@ -42,12 +49,37 @@ class ShowDetailsPageState extends ConsumerState<ShowDetailsPage> {
             .toList() ??
         [];
 
+    final reservationLists = widget.reservationList?[selectedDayKey]
+            ?.map((docId) {
+              final reservation = eventDetails?[docId];
+              return reservation;
+            })
+            .where((reservation) => reservation != null)
+            .toList() ??
+        [];
+
     debugPrint("Events for selected date: $eventsForSelectedDate"); // 追加
 
     return eventsForSelectedDate.isEmpty
         ? Scaffold(
             appBar: AppBar(
               title: const Text("詳細画面"),
+              actions: [
+                ElevatedButton(
+                  onPressed: () async {
+                    bool result = await ref
+                        .read(reservationNotifierProvider.notifier)
+                        .cancelReservation(widget.selectedDate);
+                    if (mounted && result) {
+                      CustomSnackbar.showTopSnackBar(context, '予約をキャンセルしました。');
+                    } else {
+                      CustomSnackbar.showTopSnackBar(
+                          context, '予約のキャンセルに失敗しました。');
+                    }
+                  },
+                  child: const Text('予約をキャンセル'),
+                ),
+              ],
             ),
             body: Center(
               child: Column(

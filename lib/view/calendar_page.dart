@@ -77,6 +77,11 @@ class CalendarPageState extends ConsumerState<CalendarPage> {
               selectedDayPredicate: (day) {
                 return isSameDay(_selectedDay, day);
               },
+              onPageChanged: (focusedDay) {
+                setState(() {
+                  _focusedDay = focusedDay;
+                });
+              },
               onDaySelected: (selectedDay, focusedDay) {
                 debugPrint("Selected day: $selectedDay"); // 追加
                 debugPrint("Event dates: $eventDates"); // 追加
@@ -91,11 +96,18 @@ class CalendarPageState extends ConsumerState<CalendarPage> {
                     builder: (context) => ShowDetailsPage(
                       selectedDate: selectedDay,
                       eventDates: eventDates,
+                      reservationList: reservationDates,
                     ),
                   ),
                 );
               },
-              calendarStyle: const CalendarStyle(),
+              calendarStyle: const CalendarStyle(
+                selectedDecoration: BoxDecoration(),
+                selectedTextStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                ),
+              ),
               calendarBuilders: CalendarBuilders(
                 markerBuilder: (context, date, events) {
                   final dateKey = DateTime(date.year, date.month, date.day);
