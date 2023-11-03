@@ -1,12 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:logger/logger.dart';
 
 import 'app.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  Stripe.publishableKey =
+      "pk_test_51O10XDKikS9TVccFzkT32iEhEPYfLxw9Dp3zDYv1owm8yYa6Br7B15Aj8Y6XqKdfILoPMO65pkE8nWHRn4q1iR4E00vW4QVWCi";
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -23,16 +27,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    final height = MediaQuery.of(context).size.height;
+    final designSize =
+        height < 812 ? const Size(375, 667) : const Size(375, 812);
+
+    return ScreenUtilInit(
+      designSize: designSize,
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        // routes: {
+        //   '/CalendarPage': (context) => CalendarPage(),
+        // },
+        home: const App(),
       ),
-      // routes: {
-      //   '/CalendarPage': (context) => CalendarPage(),
-      // },
-      home: const App(),
     );
   }
 }

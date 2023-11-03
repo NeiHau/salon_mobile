@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../common/custom_snackbar.dart';
-import '../viewModel/customer_view_model.dart';
-import '../viewModel/reservation_view_model.dart';
-import 'input_details_form.dart';
+import '../../../viewModel/customer_view_model.dart';
+import '../../../viewModel/reservation_view_model.dart';
+import '../../components/custom_snackbar.dart';
+import '../input_details/input_details_form.dart';
 
 class ShowDetailsPage extends ConsumerStatefulWidget {
   const ShowDetailsPage({

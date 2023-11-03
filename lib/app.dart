@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:salon/view/calendar_page.dart';
-import 'package:salon/view/home_page.dart';
+import 'package:salon/view/features/calendar/calendar_page.dart';
+import 'package:salon/view/features/home/home_page.dart';
+import 'package:salon/view/features/salon/salon_page.dart';
+import 'package:salon/view/features/shopping/shopping_page.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -13,6 +15,8 @@ class AppState extends State<App> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
+    SalonFormPage(),
+    ShoppingPage(),
     CalendarPage(),
   ];
 
@@ -34,6 +38,14 @@ class AppState extends State<App> {
             icon: Icon(Icons.home),
             label: 'ホーム',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.woman),
+            label: 'サロン',
+          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.store),
+          //   label: 'ショップ',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
             label: 'カレンダー',

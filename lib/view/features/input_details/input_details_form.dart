@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../common/custom_snackbar.dart';
-import '../viewModel/customer_view_model.dart';
-import 'completed_input_page.dart';
+import '../../../viewModel/customer_view_model.dart';
+import '../../components/completed_input_page.dart';
+import '../../components/custom_snackbar.dart';
 
 class InputDetailsForm extends ConsumerStatefulWidget {
   const InputDetailsForm({super.key});

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-import '../common/custom_snackbar.dart';
-import '../model/reservation.dart';
-import '../viewModel/reservation_view_model.dart';
+import '../../../model/reservation.dart';
+import '../../../viewModel/reservation_view_model.dart';
+import '../../components/custom_snackbar.dart';
 
 class ReservationPage extends ConsumerStatefulWidget {
   const ReservationPage({Key? key}) : super(key: key);
