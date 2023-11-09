@@ -18,6 +18,7 @@ class ReservationNotifier extends StateNotifier<Reservation> {
             customerId: '',
             reservationDate: DateTime.now(),
             customerName: '',
+            email: '',
           ),
         );
 

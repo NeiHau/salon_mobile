@@ -5,37 +5,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class PushNotificationRepository {
-  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
   static Future<String?> getDeviceToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
     // ここでトークンをサーバーに送信するなどの処理を行う
     return token;
   }
 
-  static void initialize() async {
-    const AndroidInitializationSettings androidInitialize =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    const DarwinInitializationSettings iOSInitialize =
-        DarwinInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: androidInitialize,
-      iOS: iOSInitialize,
-    );
-
-    await _notificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse details) async {
-        // Handle notification tap
-      },
-    );
-  }
+  // static void initialize() async {
+  //   const AndroidInitializationSettings androidInitialize =
+  //       AndroidInitializationSettings('@mipmap/ic_launcher');
+  //   const DarwinInitializationSettings iOSInitialize =
+  //       DarwinInitializationSettings(
+  //     requestAlertPermission: false,
+  //     requestBadgePermission: false,
+  //     requestSoundPermission: false,
+  //   );
+  //   const InitializationSettings initializationSettings =
+  //       InitializationSettings(
+  //     android: androidInitialize,
+  //     iOS: iOSInitialize,
+  //   );
+  //
+  //   await _notificationsPlugin.initialize(
+  //     initializationSettings,
+  //     onDidReceiveNotificationResponse: (NotificationResponse details) async {
+  //       // Handle notification tap
+  //     },
+  //   );
+  // }
 
   static Future<void> showNotification(String title, String body) async {
     var androidInitialize =

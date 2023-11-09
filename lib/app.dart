@@ -4,6 +4,7 @@ import 'package:salon/view/features/calendar/calendar_page.dart';
 import 'package:salon/view/features/home/home_page.dart';
 import 'package:salon/view/features/salon/salon_page.dart';
 import 'package:salon/view/features/shopping/shopping_page.dart';
+import 'package:salon/web_api/repositories/notification_repository.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -38,12 +39,12 @@ class AppState extends State<App> {
   void setupFirebaseMessagingListeners() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       // ここで通知を表示する前に、既に表示された通知でないか確認するロジックを入れる
-      // final result = await PushNotificationRepository.showNotification(
-      //   message.notification?.title ?? 'No Title',
-      //   message.notification?.body ?? 'No Body',
-      // );
-      //
-      // return result;
+      final result = await PushNotificationRepository.showNotification(
+        message.notification?.title ?? 'No Title',
+        message.notification?.body ?? 'No Body',
+      );
+
+      return result;
     });
   }
 

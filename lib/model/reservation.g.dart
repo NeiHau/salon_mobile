@@ -11,6 +11,7 @@ _$ReservationImpl _$$ReservationImplFromJson(Map<String, dynamic> json) =>
       customerId: json['customerId'] as String,
       reservationDate: DateTime.parse(json['reservationDate'] as String),
       customerName: json['customerName'] as String,
+      email: json['email'] as String,
       reservationList: (json['reservationList'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(DateTime.parse(k), e as List<dynamic>),
       ),
@@ -21,6 +22,7 @@ Map<String, dynamic> _$$ReservationImplToJson(_$ReservationImpl instance) =>
       'customerId': instance.customerId,
       'reservationDate': instance.reservationDate.toIso8601String(),
       'customerName': instance.customerName,
+      'email': instance.email,
       'reservationList': instance.reservationList
           ?.map((k, e) => MapEntry(k.toIso8601String(), e)),
     };

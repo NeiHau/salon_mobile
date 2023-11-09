@@ -16,7 +16,9 @@ class ReservationPage extends ConsumerStatefulWidget {
 class ReservationPageState extends ConsumerState<ReservationPage> {
   DateTime _selectedDate = DateTime.now();
   String _customerName = '';
-  late final String customerId; // `late`キーワードを追加
+  late final String customerId;
+
+  String _email = ''; // `late`キーワードを追加
 
   @override
   void initState() {
@@ -51,6 +53,18 @@ class ReservationPageState extends ConsumerState<ReservationPage> {
             TextField(
               onChanged: (value) {
                 setState(() {
+                  _email = value;
+                });
+              },
+              decoration: const InputDecoration(
+                labelText: 'メールアドレス',
+              ),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              onChanged: (value) {
+                setState(() {
                   _customerName = value;
                 });
               },
@@ -68,8 +82,9 @@ class ReservationPageState extends ConsumerState<ReservationPage> {
               onPressed: () async {
                 final reservation = Reservation(
                   customerId: customerId,
-                  customerName: _customerName,
                   reservationDate: _selectedDate,
+                  customerName: _customerName,
+                  email: _email,
                 );
                 final result = await ref
                     .read(reservationNotifierProvider.notifier)

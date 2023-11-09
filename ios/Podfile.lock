@@ -643,6 +643,9 @@ PODS:
     - Firebase/Functions (= 10.16.0)
     - firebase_core
     - Flutter
+  - Firebase/Auth (10.16.0):
+    - Firebase/CoreOnly
+    - FirebaseAuth (~> 10.16.0)
   - Firebase/CoreOnly (10.16.0):
     - FirebaseCore (= 10.16.0)
   - Firebase/Firestore (10.16.0):
@@ -657,6 +660,10 @@ PODS:
   - Firebase/Storage (10.16.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.16.0)
+  - firebase_auth (4.12.1):
+    - Firebase/Auth (= 10.16.0)
+    - firebase_core
+    - Flutter
   - firebase_core (2.21.0):
     - Firebase/CoreOnly (= 10.16.0)
     - Flutter
@@ -669,6 +676,13 @@ PODS:
     - firebase_core
     - Flutter
   - FirebaseAppCheckInterop (10.17.0)
+  - FirebaseAuth (10.16.0):
+    - FirebaseAppCheckInterop (~> 10.0)
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GTMSessionFetcher/Core (< 4.0, >= 2.1)
+    - RecaptchaInterop (~> 100.0)
   - FirebaseAuthInterop (10.17.0)
   - FirebaseCore (10.16.0):
     - FirebaseCoreInternal (~> 10.0)
@@ -819,6 +833,7 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.3.1)
+  - RecaptchaInterop (100.0.0)
   - Stripe (23.16.0):
     - StripeApplePay (= 23.16.0)
     - StripeCore (= 23.16.0)
@@ -859,6 +874,7 @@ PODS:
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
+  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
@@ -874,6 +890,7 @@ SPEC REPOS:
     - BoringSSL-GRPC
     - Firebase
     - FirebaseAppCheckInterop
+    - FirebaseAuth
     - FirebaseAuthInterop
     - FirebaseCore
     - FirebaseCoreExtension
@@ -893,6 +910,7 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - PromisesObjC
+    - RecaptchaInterop
     - Stripe
     - StripeApplePay
     - StripeCore
@@ -907,6 +925,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
     :path: ".symlinks/plugins/cloud_functions/ios"
+  firebase_auth:
+    :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
@@ -930,10 +950,12 @@ SPEC CHECKSUMS:
   cloud_firestore: 8adb36c2bc754352c717984153ecd7e6c6898047
   cloud_functions: acacc2473a46085dd367702b1b3316449b016e49
   Firebase: 25899099b77d255a636e3579c3d9dce10ec150d5
+  firebase_auth: ff474dcf17bee5762106162e0791433024890ada
   firebase_core: 68027ba03585e3efe1608e35d3ab2777a64eabe9
   firebase_messaging: e11ea61b449e6e39741b8a309ddab803ef1eb5cd
   firebase_storage: 39292d9729a2840035c6156fcec73168c7c234d4
   FirebaseAppCheckInterop: 534d033d8d0436b4ab066a8205013d271e18a2b9
+  FirebaseAuth: 3862d87d4d58deff08f705d471896a2f66e8bbf0
   FirebaseAuthInterop: 86bc376e41419f2dc05c16aa42fe8301171a93aa
   FirebaseCore: 65a801af84cca84361ef9eac3fd868656968a53b
   FirebaseCoreExtension: 47720bb330d7041047c0935a34a3a4b92f818074
@@ -957,6 +979,7 @@ SPEC CHECKSUMS:
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   Stripe: fcab417424a45d995aa1e62a39bc942233b61ba3
   stripe_ios: 2b444aaa35682eee30eac8733a9d502c1e925a4a
   StripeApplePay: 81de266a964b3ad02fb25e8b22fd8c235d2916a8

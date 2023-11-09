@@ -9,6 +9,7 @@ class Reservation with _$Reservation {
     required String customerId,
     required DateTime reservationDate,
     required String customerName,
+    required String email, // メールアドレス
     Map<DateTime, List>? reservationList,
   }) = _Reservation;
 

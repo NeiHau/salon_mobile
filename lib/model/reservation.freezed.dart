@@ -23,6 +23,7 @@ mixin _$Reservation {
   String get customerId => throw _privateConstructorUsedError;
   DateTime get reservationDate => throw _privateConstructorUsedError;
   String get customerName => throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError; // メールアドレス
   Map<DateTime, List>? get reservationList =>
       throw _privateConstructorUsedError;
 
@@ -42,6 +43,7 @@ abstract class $ReservationCopyWith<$Res> {
       {String customerId,
       DateTime reservationDate,
       String customerName,
+      String email,
       Map<DateTime, List>? reservationList});
 }
 
@@ -61,6 +63,7 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
     Object? customerId = null,
     Object? reservationDate = null,
     Object? customerName = null,
+    Object? email = null,
     Object? reservationList = freezed,
   }) {
     return _then(_value.copyWith(
@@ -75,6 +78,10 @@ class _$ReservationCopyWithImpl<$Res, $Val extends Reservation>
       customerName: null == customerName
           ? _value.customerName
           : customerName // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       reservationList: freezed == reservationList
           ? _value.reservationList
@@ -96,6 +103,7 @@ abstract class _$$ReservationImplCopyWith<$Res>
       {String customerId,
       DateTime reservationDate,
       String customerName,
+      String email,
       Map<DateTime, List>? reservationList});
 }
 
@@ -113,6 +121,7 @@ class __$$ReservationImplCopyWithImpl<$Res>
     Object? customerId = null,
     Object? reservationDate = null,
     Object? customerName = null,
+    Object? email = null,
     Object? reservationList = freezed,
   }) {
     return _then(_$ReservationImpl(
@@ -127,6 +136,10 @@ class __$$ReservationImplCopyWithImpl<$Res>
       customerName: null == customerName
           ? _value.customerName
           : customerName // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       reservationList: freezed == reservationList
           ? _value._reservationList
@@ -143,6 +156,7 @@ class _$ReservationImpl implements _Reservation {
       {required this.customerId,
       required this.reservationDate,
       required this.customerName,
+      required this.email,
       final Map<DateTime, List>? reservationList})
       : _reservationList = reservationList;
 
@@ -155,7 +169,11 @@ class _$ReservationImpl implements _Reservation {
   final DateTime reservationDate;
   @override
   final String customerName;
+  @override
+  final String email;
+// メールアドレス
   final Map<DateTime, List>? _reservationList;
+// メールアドレス
   @override
   Map<DateTime, List>? get reservationList {
     final value = _reservationList;
@@ -167,7 +185,7 @@ class _$ReservationImpl implements _Reservation {
 
   @override
   String toString() {
-    return 'Reservation(customerId: $customerId, reservationDate: $reservationDate, customerName: $customerName, reservationList: $reservationList)';
+    return 'Reservation(customerId: $customerId, reservationDate: $reservationDate, customerName: $customerName, email: $email, reservationList: $reservationList)';
   }
 
   @override
@@ -181,14 +199,20 @@ class _$ReservationImpl implements _Reservation {
                 other.reservationDate == reservationDate) &&
             (identical(other.customerName, customerName) ||
                 other.customerName == customerName) &&
+            (identical(other.email, email) || other.email == email) &&
             const DeepCollectionEquality()
                 .equals(other._reservationList, _reservationList));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, customerId, reservationDate,
-      customerName, const DeepCollectionEquality().hash(_reservationList));
+  int get hashCode => Object.hash(
+      runtimeType,
+      customerId,
+      reservationDate,
+      customerName,
+      email,
+      const DeepCollectionEquality().hash(_reservationList));
 
   @JsonKey(ignore: true)
   @override
@@ -209,6 +233,7 @@ abstract class _Reservation implements Reservation {
       {required final String customerId,
       required final DateTime reservationDate,
       required final String customerName,
+      required final String email,
       final Map<DateTime, List>? reservationList}) = _$ReservationImpl;
 
   factory _Reservation.fromJson(Map<String, dynamic> json) =
@@ -221,6 +246,8 @@ abstract class _Reservation implements Reservation {
   @override
   String get customerName;
   @override
+  String get email;
+  @override // メールアドレス
   Map<DateTime, List>? get reservationList;
   @override
   @JsonKey(ignore: true)
