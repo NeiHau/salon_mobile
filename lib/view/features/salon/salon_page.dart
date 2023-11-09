@@ -1,14 +1,14 @@
-// 他のimport宣言...
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:salon/view/utils/async_value_when.dart';
 
 import '../../../viewModel/salon_view_model.dart';
+import '../../../web_api/cloud_functions/repository/hello_demo.dart';
 import '../../../web_api/models/salon/salon_request_model.dart';
+import '../../../web_api/repositories/notification_repository.dart';
 import '../../components/custom_button.dart';
-import '../../utils/app_text_styles.dart';
 
 class SalonFormPage extends ConsumerStatefulWidget {
   const SalonFormPage({Key? key}) : super(key: key);
@@ -19,8 +19,6 @@ class SalonFormPage extends ConsumerStatefulWidget {
 
 class SalonFormPageState extends ConsumerState<SalonFormPage> {
   final _formKey = GlobalKey<FormState>();
-
-  // SalonRequestModelのインスタンスを作成し、デフォルト値を設定します
   final _salonRequest = SalonRequestModel(
     age: 0, // 初期値
     gender: '',
@@ -28,6 +26,16 @@ class SalonFormPageState extends ConsumerState<SalonFormPage> {
     hairLength: 0,
     hairColor: '',
   );
+
+  bool _isLoading = false;
+
+  // Firebase Messagingの初期化
+  // FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +49,6 @@ class SalonFormPageState extends ConsumerState<SalonFormPage> {
           key: _formKey,
           child: ListView(
             children: <Widget>[
-              // フォームフィールドの実装...
-              // 年齢、性別、職業、髪の長さ、髪の色のTextFormFieldを作成します
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: '年齢',
@@ -120,45 +126,64 @@ class SalonFormPageState extends ConsumerState<SalonFormPage> {
                   _salonRequest.hairColor = value!;
                 },
               ),
+              Gap(30.h),
               // ボタンを押したときの処理を追加
               CustomButton(
                 title: '推薦を受け取る',
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      _isLoading = true;
+                    });
+
                     _formKey.currentState!.save();
-                    // ViewModelでgetRecommendationを呼び出す
+
                     await ref
                         .read(salonResponseProvider.notifier)
                         .getSalonRecommendation(_salonRequest);
+
+                    setState(() {
+                      _isLoading = false;
+                    });
                   }
+                },
+              ),
+              Gap(25.h),
+              CustomButton(
+                title: 'Cloud Functions 実行',
+                onPressed: () async {
+                  CloudFunctionsDemo.callFunction();
+                },
+              ),
+              Gap(25.h),
+              CustomButton(
+                title: 'FCMトークン 取得',
+                onPressed: () async {
+                  final result =
+                      await PushNotificationRepository.getDeviceToken();
+
+                  debugPrint(result);
                 },
               ),
 
               // AsyncValueのレスポンスに応じてWidgetを表示
               ref.watch(salonResponseProvider).whenWidget(
                     context: context,
-                    loading: const SizedBox(),
-                    error: (error, stack) =>
-                        _errorWidget(context, error, stack),
+                    loading: _isLoading
+                        ? SizedBox(
+                            height: MediaQuery.of(context).size.height,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        : Container(),
                     data: (data) {
-                      // データに基づいたウィジェットを返します
                       return Text('推薦: ${data.recommendation}');
                     },
                   ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  // エラーウィジェットのビルド
-  Widget _errorWidget(BuildContext context, Object error, StackTrace? stack) {
-    return Center(
-      child: Text(
-        'エラーが発生しました: $error',
-        textAlign: TextAlign.center,
-        style: AppTextStyles.lightBlackBody2,
       ),
     );
   }

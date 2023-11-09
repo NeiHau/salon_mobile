@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:salon/view/utils/app_strings.dart';
 
-import '../../web_api/models/web_api_error_model.dart';
+import '../../web_api/models/api_error/web_api_error_model.dart';
 
 class AsyncValueException implements Exception {
   const AsyncValueException({

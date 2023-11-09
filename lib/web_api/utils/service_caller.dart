@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 // Project imports:
 import '../../view/utils/app_strings.dart';
 import '../../view/utils/exception.dart';
-import '../models/web_api_error_model.dart';
+import '../models/api_error/web_api_error_model.dart';
 import 'fuctions_response.dart';
 
 Future<FunctionsResponse<T>> serviceCaller<T>({

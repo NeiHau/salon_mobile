@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../web_api/models/payment_request_model.dart';
+import '../web_api/models/payment/payment_request_model.dart';
 import '../web_api/repositories/payment_repository.dart';
 
 final shoppingStateViewModelProvider =

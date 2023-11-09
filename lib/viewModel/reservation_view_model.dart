@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -29,8 +28,6 @@ class ReservationNotifier extends StateNotifier<Reservation> {
   // 予約
   final CollectionReference reservations =
       FirebaseFirestore.instance.collection('reservations');
-
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   // 予約情報のマッピング
   Map<DateTime, List<Reservation>> reservationDates = {};
@@ -68,29 +65,8 @@ class ReservationNotifier extends StateNotifier<Reservation> {
   Future<bool> createReservation(Reservation reservation) async {
     try {
       // 予約情報をFirebaseに保存
-      DocumentReference reservationRef =
-          await reservations.add(reservation.toJson());
+      await reservations.add(reservation.toJson());
 
-      // 顧客の予約リストに新しい予約を追加
-      await customers.doc(reservation.customerId).set(
-        {
-          'reservations': FieldValue.arrayUnion([reservationRef.id])
-        },
-        SetOptions(merge: true),
-      );
-
-      // 通知を送信
-      await _firebaseMessaging.subscribeToTopic(reservationRef.id);
-
-      // 通知メッセージを作成
-      final message = RemoteMessage(
-        threadId: reservationRef.id,
-        notification: RemoteNotification(
-            title: '予約完了', body: '${reservation.customerName}さん、予約が完了しました。'),
-      );
-
-      // 通知メッセージを送信
-      // await FirebaseMessaging.instance.sendMessage(message: message);
       await fetchReservations();
 
       return true;

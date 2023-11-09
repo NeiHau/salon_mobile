@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -9,12 +11,27 @@ import 'app.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  await dotenv.load(fileName: ".env");
   Stripe.publishableKey =
       "pk_test_51O10XDKikS9TVccFzkT32iEhEPYfLxw9Dp3zDYv1owm8yYa6Br7B15Aj8Y6XqKdfILoPMO65pkE8nWHRn4q1iR4E00vW4QVWCi";
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // FCM の通知権限リクエスト
+  final messaging = FirebaseMessaging.instance;
+
+  await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -41,9 +58,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        // routes: {
-        //   '/CalendarPage': (context) => CalendarPage(),
-        // },
         home: const App(),
       ),
     );
