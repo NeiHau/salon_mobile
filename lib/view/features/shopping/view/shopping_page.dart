@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:gap/gap.dart';
 import 'package:salon/view/utils/async_value_when.dart';
 
-import '../../../viewModel/shopping_view_model.dart';
+import '../../payment/payment_screen.dart';
+import '../viewModel/shopping_view_model.dart';
 
 class ShoppingPage extends ConsumerStatefulWidget {
   const ShoppingPage({super.key});
@@ -16,9 +19,9 @@ class ShoppingPage extends ConsumerStatefulWidget {
 
 class _ShoppingPageState extends ConsumerState<ShoppingPage> {
   final _formKey = GlobalKey<FormState>();
-  int _amount = 0;
-  String _currency = '';
-  String _receiptEmail = '';
+  final int _amount = 0;
+  final String _currency = '';
+  final String _receiptEmail = '';
 
   final _amountController = TextEditingController();
   final _currencyController = TextEditingController();
@@ -35,6 +38,7 @@ class _ShoppingPageState extends ConsumerState<ShoppingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final paymentNotifier = ref.watch(shoppingStateViewModelProvider.notifier);
     final paymentState = ref.watch(
         shoppingStateViewModelProvider.select((value) => value.paymentStatus));
 
@@ -80,13 +84,13 @@ class _ShoppingPageState extends ConsumerState<ShoppingPage> {
               onPressed: () async {
                 if (_formKey.currentState?.validate() ?? false) {
                   _formKey.currentState?.save();
-                  final paymentIntentResponse = ref
-                      .read(shoppingViewModelProvider.notifier)
-                      .uploadPaymentInfo(
-                        amount: _amount,
-                        currency: _currency,
-                        receiptEmail: _receiptEmail,
-                      );
+
+                  final paymentIntentResponse =
+                      paymentNotifier.uploadPaymentInfo(
+                    amount: _amount,
+                    currency: _currency,
+                    receiptEmail: _receiptEmail,
+                  );
 
                   // StripeのclientSecretを取得
                   final Map<String, dynamic> paymentIntentData =
@@ -115,6 +119,15 @@ class _ShoppingPageState extends ConsumerState<ShoppingPage> {
               data: (_) => const Text('支払いが完了しました'),
               loading: const CircularProgressIndicator(),
               error: (error, stackTrace) => Text('エラーが発生しました: $error'),
+            ),
+            Gap(30.h),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const PaymentSheetPage()),
+                );
+              },
+              child: const Text('支払い画面へ'),
             ),
           ],
         ),

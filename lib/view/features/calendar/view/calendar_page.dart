@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:salon/view/features/reservation/reservation_page.dart';
+import 'package:salon/view/features/reservation/view/reservation_page.dart';
 import 'package:salon/view/features/show_details/show_details_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../viewModel/customer_view_model.dart';
-import '../../../viewModel/reservation_view_model.dart';
-import '../input_details/input_details_form.dart';
+import '../../reservation/viewModel/reservation_view_model.dart';
+import '../viewModel/customer_view_model.dart';
+import 'componets/input_details_form.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {
   const CalendarPage({super.key});

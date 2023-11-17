@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:logger/logger.dart';
+import 'package:salon/app.dart';
 import 'package:salon/view/features/sign_up/sign_up_screen.dart';
+import 'package:salon/web_api/auth/auth_repository.dart';
 
 import 'firebase_options.dart';
 
@@ -39,14 +41,16 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
     final designSize =
         height < 812 ? const Size(375, 667) : const Size(375, 812);
+
+    final currentUser = ref.read(currentUserProvider);
 
     return ScreenUtilInit(
       designSize: designSize,
@@ -58,7 +62,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const SignUpScreen(),
+        home: currentUser == null ? const SignUpScreen() : const App(),
       ),
     );
   }

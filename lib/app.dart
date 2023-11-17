@@ -1,9 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:salon/view/features/calendar/calendar_page.dart';
+import 'package:salon/view/features/calendar/view/calendar_page.dart';
 import 'package:salon/view/features/home/home_page.dart';
-import 'package:salon/view/features/salon/salon_page.dart';
-import 'package:salon/view/features/shopping/shopping_page.dart';
+import 'package:salon/view/features/salon/view/salon_page.dart';
+import 'package:salon/view/features/shopping/view/shopping_page.dart';
 import 'package:salon/web_api/repositories/notification_repository.dart';
 
 class App extends StatefulWidget {

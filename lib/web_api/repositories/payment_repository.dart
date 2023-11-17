@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:salon/web_api/utils/dio_provider.dart';
-import 'package:salon/web_api/utils/service_caller.dart';
+import 'package:salon/utils/dio_provider.dart';
+import 'package:salon/utils/service_caller.dart';
 
-import '../models/payment/payment_request_model.dart';
+import '../../utils/fuctions_response.dart';
+import '../../view/features/shopping/model/payment_request_model.dart';
 import '../services/api_service.dart';
-import '../utils/fuctions_response.dart';
 
 final paymentRepositoryProvider = Provider(
   (ref) => PaymentRepositoryImpl._(

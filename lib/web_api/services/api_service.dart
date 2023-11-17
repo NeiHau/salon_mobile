@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 
-import '../models/payment/payment_request_model.dart';
+import '../../view/features/shopping/model/payment_request_model.dart';
 import '../models/salon/salon_request_model.dart';
 import '../models/salon/salon_response_model.dart';
 

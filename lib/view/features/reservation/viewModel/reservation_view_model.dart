@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:salon/main.dart';
-import 'package:salon/model/reservation.dart';
+
+import '../model/reservation.dart';
 
 final reservationNotifierProvider =
     StateNotifierProvider<ReservationNotifier, Reservation>((ref) {

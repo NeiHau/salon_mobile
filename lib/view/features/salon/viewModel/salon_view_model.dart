@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../web_api/models/salon/salon_request_model.dart';
-import '../web_api/models/salon/salon_response_model.dart';
-import '../web_api/repositories/salon_repository.dart';
+import '../../../../web_api/models/salon/salon_request_model.dart';
+import '../../../../web_api/models/salon/salon_response_model.dart';
+import '../../../../web_api/repositories/salon_repository.dart';
 
 final salonResponseProvider = StateNotifierProvider.autoDispose<
     SalonResponseState, AsyncValue<SalonResponseModel>>(

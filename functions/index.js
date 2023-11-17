@@ -88,3 +88,56 @@ exports.sendReservationNotification = functions
     }
 });
 
+
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
+// Stripeメソッド
+exports.createPaymentIntent = functions
+    .region('asia-northeast1')
+    .https
+    .onCall(async (_, __) => {
+
+    try {
+        const customer = await stripe.customers.create();
+        const ephemeralKey = await stripe.ephemeralKeys.create(
+            {customer: customer.id},
+            {apiVersion: '2020-08-27'}
+        );
+
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: 1000,
+            currency: 'jpy',
+            customer: customer.id,
+            automatic_payment_methods: {
+                enabled: true,
+            },
+        });
+
+        return {
+            paymentIntent: paymentIntent.client_secret,
+            ephemeralKey: ephemeralKey.secret,
+            customer: customer.id,
+        };
+    } catch (error) {
+        console.error('error: %j', error);
+        return {
+            title: 'エラーが発生しました',
+            message: error,
+        }
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

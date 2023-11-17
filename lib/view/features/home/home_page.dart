@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../../model/customer.dart';
-import '../../../viewModel/customer_view_model.dart';
-import '../home_details/home_details_page.dart';
+import '../calendar/model/customer.dart';
+import '../calendar/viewModel/customer_view_model.dart';
+import 'components/home_details_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
