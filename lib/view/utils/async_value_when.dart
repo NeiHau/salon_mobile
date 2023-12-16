@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../components/custom_button.dart';
-import 'app_strings.dart';
 import 'exception/exception.dart';
+import 'theme/app_strings.dart';
 import 'theme/app_text_styles.dart';
 
 /// WebApiのレスポンスによってViewの見え方を変更する拡張クラス

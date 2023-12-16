@@ -45,4 +45,4 @@ app.*.map.json
 
 .env
 
-lib/view/utils/app_strings.dart
+lib/view/utils/theme/app_strings.dart
