@@ -4,6 +4,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../view/features/sign_up/sign_up_screen.dart';
+
 // 現在のユーザーを取得
 final currentUserProvider = Provider((ref) {
   final currentUser = FirebaseAuth.instance.currentUser;
@@ -62,7 +64,7 @@ class AuthRepository extends StateNotifier<AuthState> {
   }
 
   // ユーザー新規登録
-  Future<void> signUp(
+  Future<bool> signUp(
     String email,
     String password,
   ) async {
@@ -82,11 +84,16 @@ class AuthRepository extends StateNotifier<AuthState> {
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user!.uid)
-            .set({
-          'email': email,
-          'fcmToken': token,
-        }, SetOptions(merge: true));
+            .set(
+          {
+            'email': email,
+            'fcmToken': token,
+          },
+          SetOptions(merge: false),
+        );
       }
+
+      return true;
     } on FirebaseAuthException catch (e) {
       // 登録失敗時の処理
       String errorMessage = '登録時にエラーが発生しました。';
@@ -98,6 +105,27 @@ class AuthRepository extends StateNotifier<AuthState> {
         errorMessage = '無効なメールアドレスが提供されました。';
       }
       debugPrint('SignUp failed: $errorMessage');
+
+      return false;
+    }
+  }
+
+  // ログアウト
+  Future<void> signOut(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+
+      // SignupPageへの遷移
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const SignUpScreen()),
+          (Route<dynamic> route) => false,
+        );
+      }
+
+      debugPrint("ログアウトしました");
+    } catch (e) {
+      debugPrint("ログアウト中にエラーが発生しました: $e");
     }
   }
 }

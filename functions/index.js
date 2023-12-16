@@ -71,17 +71,9 @@ exports.sendReservationNotification = functions
             token: user.fcmToken
         };
 
-//    return admin.messaging().send(message)
-//        .then((response) => {
-//        console.log('正常に通知を送りました。', response);
-//        return null;
-//        })
-//        .catch((error) => {
-//        console.error('通知の送信に失敗しました:', error);
-//        })
     // プッシュ通知を送信
     try {
-      const response = await admin.messaging().send(message);
+      await admin.messaging().send(message);
       console.log('正常に通知を送りました。', response);
     } catch (error) {
       console.error('通知の送信に失敗しました:', error);

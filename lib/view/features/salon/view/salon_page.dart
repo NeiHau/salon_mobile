@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:salon/view/utils/async_value_when.dart';
+import 'package:salon/web_api/auth/auth_repository.dart';
 
-import '../../../../web_api/cloud_functions/repository/hello_demo.dart';
 import '../../../../web_api/models/salon/salon_request_model.dart';
 import '../../../../web_api/repositories/notification_repository.dart';
 import '../../../components/custom_button.dart';
@@ -152,7 +152,11 @@ class SalonFormPageState extends ConsumerState<SalonFormPage> {
               CustomButton(
                 title: 'Cloud Functions 実行',
                 onPressed: () async {
-                  CloudFunctionsDemo.callFunction();
+                  // CloudFunctionsDemo.callFunction();
+
+                  await ref
+                      .read(authRepositoryProvider.notifier)
+                      .signOut(context);
                 },
               ),
               Gap(25.h),

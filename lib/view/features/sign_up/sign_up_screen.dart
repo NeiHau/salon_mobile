@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:salon/web_api/auth/auth_repository.dart';
 
 import '../../../app.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
   @override
   SignUpScreenState createState() => SignUpScreenState();
 }
 
-class SignUpScreenState extends State<SignUpScreen> {
+class SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -22,6 +24,8 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authNotifier = ref.read(authRepositoryProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('ユーザー登録画面'),
@@ -43,9 +47,14 @@ class SignUpScreenState extends State<SignUpScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                final result = await authNotifier.signUp(
+                  _emailController.text,
+                  _passwordController.text,
+                );
+
                 // ログイン後の画面（MainScreen）に遷移
-                if (mounted) {
+                if (mounted && result == true) {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (_) => const App()),
                   );
