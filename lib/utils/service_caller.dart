@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 
 // Project imports:
 import '../view/utils/app_strings.dart';
-import '../view/utils/exception.dart';
+import '../view/utils/exception/exception.dart';
 import '../web_api/models/api_error/web_api_error_model.dart';
 import 'fuctions_response.dart';
 

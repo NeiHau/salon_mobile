@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../calendar/model/customer.dart';
+import '../../features/calendar/model/customer.dart';
 
 class DialogManager {
   static Future<void> showFilterDialog(

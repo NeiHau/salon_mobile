@@ -52,8 +52,6 @@ class MyApp extends ConsumerWidget {
 
     final currentUser = ref.read(currentUserProvider);
 
-    debugPrint("Current user is : $currentUser");
-
     return ScreenUtilInit(
       designSize: designSize,
       minTextAdapt: true,

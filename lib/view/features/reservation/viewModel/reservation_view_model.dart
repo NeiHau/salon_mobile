@@ -57,7 +57,6 @@ class ReservationNotifier extends StateNotifier<Reservation> {
 
       reservationDates = tempReservations;
       state = state.copyWith(reservationList: reservationDates);
-      state = state.copyWith();
     } catch (e) {
       logger.log(Level.trace, e);
     }

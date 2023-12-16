@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // Project imports:
-import '../utils/app_colors.dart';
-import '../utils/app_text_styles.dart';
+import '../utils/theme/app_colors.dart';
+import '../utils/theme/app_text_styles.dart';
 
 // ignore: must_be_immutable
 class CustomButton extends StatelessWidget {

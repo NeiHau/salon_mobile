@@ -6,8 +6,8 @@ import 'package:gap/gap.dart';
 
 import '../components/custom_button.dart';
 import 'app_strings.dart';
-import 'app_text_styles.dart';
-import 'exception.dart';
+import 'exception/exception.dart';
+import 'theme/app_text_styles.dart';
 
 /// WebApiのレスポンスによってViewの見え方を変更する拡張クラス
 extension AsyncValueWidget<T> on AsyncValue<T> {
