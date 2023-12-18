@@ -22,7 +22,9 @@ class HomePage extends ConsumerStatefulWidget {
 class HomePageState extends ConsumerState<HomePage> {
   late Future<List<Customer>> customers;
 
-  final TextEditingController nameController = TextEditingController();
+  List<Customer> sortedCustomers = [];
+
+  final TextEditingController _nameController = TextEditingController();
 
   DateTime? selectedDate;
 
@@ -36,21 +38,30 @@ class HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
 
+    customers = ref
+        .read(customerNotifierProvider.notifier)
+        .fetchAllCustomers()
+        .then((data) {
+      sortedCustomers = data;
+
+      return sortedCustomers;
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.refresh(customerNotifierProvider.notifier).fetchAllCustomers();
     });
-    customers = ref.read(customerNotifierProvider.notifier).fetchAllCustomers();
   }
 
   @override
   void dispose() {
-    nameController.dispose();
+    _nameController.dispose();
+    _scroller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool _isDragging = ref.watch(dragStateProvider);
+    final bool isDragging = ref.watch(dragStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +70,7 @@ class HomePageState extends ConsumerState<HomePage> {
       ),
       body: Stack(
         children: [
-          _homeBody(_isDragging),
+          _homeBody(isDragging),
           _showDialogButton(),
         ],
       ),
@@ -67,8 +78,6 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   Widget _homeBody(bool isDragging) {
-    final List<int> items = List<int>.generate(50, (int index) => index);
-
     return Column(
       children: [
         Expanded(
@@ -95,8 +104,10 @@ class HomePageState extends ConsumerState<HomePage> {
 
                   RenderBox render = _listViewKey.currentContext
                       ?.findRenderObject() as RenderBox;
+
                   // ListViewの左上隅の位置（ローカル座標系での原点）を、デバイスの画面全体を基準としたグローバル座標系に変換
                   Offset position = render.localToGlobal(Offset.zero);
+
                   double topY = position.dy;
                   double bottomY = topY + render.size.height;
 
@@ -135,15 +146,14 @@ class HomePageState extends ConsumerState<HomePage> {
                 },
                 child: ReorderableListView.builder(
                   key: _listViewKey,
+                  scrollController: _scroller,
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    final sortedCustomers = snapshot.data!
-                      ..sort((a, b) => b.date.compareTo(a.date)); // 日付でソート
                     final customer = sortedCustomers[index];
 
                     return CustomerTile(
-                      key: ValueKey(index),
+                      key: ValueKey(customer.id),
                       customer: customer,
                       onTap: () {
                         // TODO: 詳細画面に遷移
@@ -156,14 +166,36 @@ class HomePageState extends ConsumerState<HomePage> {
                       },
                     );
                   },
+                  onReorderStart: (int index) {
+                    ref.watch(dragStateProvider.notifier).state = true;
+
+                    // 並び替え開始時の座標を出力
+                    RenderBox render = _listViewKey.currentContext
+                        ?.findRenderObject() as RenderBox;
+                    Offset startPosition = render.localToGlobal(Offset.zero);
+                    debugPrint(
+                        "ListView start position at reorder: ${startPosition.dy}");
+                  },
                   onReorder: (int oldIndex, int newIndex) {
                     setState(() {
                       if (oldIndex < newIndex) {
                         newIndex -= 1;
                       }
-                      final int item = items.removeAt(oldIndex);
-                      items.insert(newIndex, item);
+                      final customer = sortedCustomers.removeAt(oldIndex);
+                      sortedCustomers.insert(newIndex, customer);
+
+                      // 座標の取得と出力
+                      RenderBox render = _listViewKey.currentContext
+                          ?.findRenderObject() as RenderBox;
+                      Offset position = render.localToGlobal(Offset.zero);
+                      double topY = position.dy;
+
+                      debugPrint(
+                          "ListView top Y position after reorder: $topY");
                     });
+                  },
+                  onReorderEnd: (int index) {
+                    ref.watch(dragStateProvider.notifier).state = false;
                   },
                 ),
               );
@@ -186,12 +218,12 @@ class HomePageState extends ConsumerState<HomePage> {
             // showDialogでモーダルを開く
             DialogManager.showFilterDialog(
               context,
-              nameController,
+              _nameController,
               (p0) {
                 customers = Future.value(
                   ref
                       .read(customerNotifierProvider.notifier)
-                      .fetchFilteredCustomers(nameController.text),
+                      .fetchFilteredCustomers(_nameController.text),
                 );
                 setState(() {});
 

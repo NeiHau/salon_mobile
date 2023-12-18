@@ -73,8 +73,10 @@ class ShowDetailsPageState extends ConsumerState<ShowDetailsPage> {
                     if (mounted && result) {
                       CustomSnackbar.showTopSnackBar(context, '予約をキャンセルしました。');
                     } else {
-                      CustomSnackbar.showTopSnackBar(
-                          context, '予約のキャンセルに失敗しました。');
+                      if (mounted) {
+                        CustomSnackbar.showTopSnackBar(
+                            context, '予約のキャンセルに失敗しました。');
+                      }
                     }
                   },
                   child: const Text('予約をキャンセル'),

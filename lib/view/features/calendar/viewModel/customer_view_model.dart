@@ -176,6 +176,8 @@ class CustomerNotifier extends StateNotifier<Customer> {
 
         customerList.add(customer);
       }
+
+      customerList.sort((a, b) => b.date.compareTo(a.date));
     } catch (e) {
       debugPrint("Failed to fetch all customers: $e");
     }

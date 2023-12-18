@@ -8,24 +8,17 @@ import 'package:salon/main.dart';
 import '../model/reservation.dart';
 
 final reservationNotifierProvider =
-    StateNotifierProvider<ReservationNotifier, Reservation>((ref) {
+    StateNotifierProvider<ReservationNotifier, ReservationList>((ref) {
   return ReservationNotifier();
 });
 
-class ReservationNotifier extends StateNotifier<Reservation> {
-  ReservationNotifier()
-      : super(
-          Reservation(
-            customerId: '',
-            reservationDate: DateTime.now(),
-            customerName: '',
-            email: '',
-          ),
-        );
-
-  // 顧客情報
-  final CollectionReference customers =
-      FirebaseFirestore.instance.collection('customers');
+class ReservationNotifier extends StateNotifier<ReservationList> {
+  ReservationNotifier() : super(const ReservationList(reservationList: {})) {
+    // コンストラクタで非同期処理を開始
+    Future.microtask(() async {
+      await fetchReservations();
+    });
+  }
 
   // 予約
   final CollectionReference reservations =
@@ -56,6 +49,7 @@ class ReservationNotifier extends StateNotifier<Reservation> {
       }
 
       reservationDates = tempReservations;
+
       state = state.copyWith(reservationList: reservationDates);
     } catch (e) {
       logger.log(Level.trace, e);
@@ -81,6 +75,7 @@ class ReservationNotifier extends StateNotifier<Reservation> {
   // 予約をキャンセル
   Future<bool> cancelReservation(DateTime selectedDate) async {
     try {
+      // Firestoreの日付フォーマットに合わせて整形
       String formattedDate =
           DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(selectedDate);
 
@@ -96,10 +91,13 @@ class ReservationNotifier extends StateNotifier<Reservation> {
         await reservations.doc(doc.id).delete();
       }
 
+      // 予約リストを更新
       await fetchReservations();
+
       return true;
     } catch (e) {
       logger.log(Level.trace, e);
+
       return false;
     }
   }

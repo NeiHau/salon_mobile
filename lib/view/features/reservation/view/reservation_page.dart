@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../components/custom_snackbar.dart';
 import '../model/reservation.dart';
 import '../viewModel/reservation_view_model.dart';
 
@@ -75,7 +75,8 @@ class ReservationPageState extends ConsumerState<ReservationPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _selectDate(context),
-              child: Text("予約日を選択: ${_selectedDate.toLocal()}"),
+              child: Text(
+                  "予約日を選択: ${DateFormat('yyyy-MM-dd').format(_selectedDate.toLocal())}"),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -86,13 +87,12 @@ class ReservationPageState extends ConsumerState<ReservationPage> {
                   customerName: _customerName,
                   email: _email,
                 );
-                final result = await ref
+                bool result = await ref
                     .read(reservationNotifierProvider.notifier)
                     .createReservation(reservation);
 
                 if (mounted && result) {
                   Navigator.pop(context);
-                  CustomSnackbar.showTopSnackBar(context, '予約が完了しました。');
                 }
               },
               child: const Text('予約する'),
